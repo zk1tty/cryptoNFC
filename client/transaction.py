@@ -20,9 +20,7 @@ class Transaction:
 
     def Build(self):
         txn = dict()
-        accountIDstr = str()
-        for ch in self.accountID:
-            accountIDstr += hex(ord(ch)).replace('0x', '')
+        txn["sender"] = self.accountID
         txn["sender"] = accountIDstr
         txn["tag"] = self.tag
         txn["payload"] = self.payload.Build()
@@ -44,8 +42,7 @@ class Payload:
 
     def Build(self):
         ret = str()
-        for ch in self.recipientID:
-            ret += hex(ord(ch)).replace('0x', '')
+        ret += self.recipientID
         ret += "%016x" % self.numPERLSSent.newbyteorder()
         ret += "%016x" % self.gasLimit.newbyteorder()
         ret += "%016x" % self.gasDeposit.newbyteorder()
