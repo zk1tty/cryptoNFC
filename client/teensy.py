@@ -29,25 +29,31 @@ print("success!")
 
 
 # call python API
+class ApiError(Exception):
+    """An API Error Exception"""
+
+    def __init__(self, status):
+        self.status = status
+
+    def __str__(self):
+        return "ApiError: status={}".format(self.status)
+
 # GET /Ledger/
-resp1 = requests.get('https://lens.perlin.net/ledger/')
-if resp.status_code != 200
+resp1 = requests.get('https://testnet.perlin.net/ledger/')
+if resp1.status_code != 200:
     # This means something went wrong.
-    raise ApiError('GET /tasks/ {}'.format(resp.status_code))
-for todo_item in resp.json():
-    print('GET /Ledger/')
-    print('{} {}'.format(todo_item['id'], todo_item['summary']))
+    raise ApiError('GET /ledger/ {}'.format(resp1.status_code))
+
+print('-------- GET /Ledger/ --------')
+print(resp1.json())
 
 # POST /tx/send/
 ## make payload
 
-post_json = {
-                "sender": "[hex-encoded sender ID, must be 32 bytes long]",
-                "tag": "[possible values: 0 = nop, 1 = transfer, 2 = contract, 3 = stake, 4 = batch",
-                "payload": "[hex-encoded payload, empty for nop]",
-                "signature": "[hex-encoded edwards25519 signature, which consists of private key, nonce, tag, and payload]"
-            }
-resp = requests.post('https://lens.perlin.net/tx/send/', json=post_json)
-if resp.status_code !=201:
-    raise ApiError('POST /tx/send/ {}'.format(resp.status_code)
-print('Send transaction: {}'.format(resp.json()["tx_id"]))
+post_json = { "sender": "[hex-encoded sender ID, must be 32 bytes long]", "tag": "1",
+              "payload": "[hex-encoded payload, empty for nop]",
+              "signature":signature}
+resp2 = requests.post('https://testnet.perlin.net/tx/send/', json=post_json)
+if resp2.status_code !=201:
+    raise ApiError('POST /tx/send/ {}'.format(resp2.status_code))
+print('Send transaction: {}'.format(resp2.json()["tx_id"]))
