@@ -12,7 +12,7 @@ class Transaction:
     def Sign(self, private_key):
         signstr = str()
         for ch in self.accountID:
-            signstr += hex(ord(ch)).replace('0x', '')
+            signstr += "%02x" % ord(ch)
         signstr += "%02x" % self.tag
         signstr += self.payload.Build()
         self.signature = private_key.sign(signstr)
@@ -25,7 +25,7 @@ class Transaction:
         txn["payload"] = self.payload.Build()
         signaturestr = str()
         for ch in self.signature:
-            signaturestr += hex(ord(ch)).replace('0x', '')
+            signaturestr += "%02x" % ord(ch)
         txn["signature"] = signaturestr
         return json.dumps(txn)
 
@@ -49,8 +49,8 @@ class Payload:
         # prefix the length
         ret += "%08x" % numpy.int32(len(self.functionName)).newbyteorder()
         for ch in self.functionName:
-            ret += hex(ord(ch)).replace('0x', '')
+            ret += "%02x" % ord(ch)
         ret += "%08x" % numpy.int32(len(self.functionPayload)).newbyteorder()
         for ch in self.functionPayload:
-            ret += hex(ord(ch)).replace('0x', '')
+            ret += "%02x" % ord(ch)
         return ret
