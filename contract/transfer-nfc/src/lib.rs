@@ -29,7 +29,7 @@ impl Contract {
     }
 
     fn charge_ic(&mut self, params: &mut Parameters) -> Result<(), String> {
-        let amount: u64 = params.read();
+        let amount: u64 = params.amount;
         if params.sender != self.owner {
             return Err("Only the owner of this contract can charge IC".to_string());
         }

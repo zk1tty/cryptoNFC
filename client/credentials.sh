@@ -1,0 +1,4 @@
+export SERIAL_DEVICE=
+export MY_PRIVATE_KEY=
+export ACCOUNT_ID=
+export RECIPIENT_ID=
