@@ -1,0 +1,15 @@
+[package]
+name = "transfer-nfc"
+version = "0.1.0"
+authors = ["Eli Wenig <eli@neukind.jp>"]
+edition = "2018"
+
+[profile.release]
+lto = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+smart-contract = "0.2.2"
+smart-contract-macros = "0.2.2"
