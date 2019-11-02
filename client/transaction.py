@@ -21,7 +21,6 @@ class Transaction:
     def Build(self):
         txn = dict()
         txn["sender"] = self.accountID
-        txn["sender"] = accountIDstr
         txn["tag"] = self.tag
         txn["payload"] = self.payload.Build()
         signaturestr = str()
