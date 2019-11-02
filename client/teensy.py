@@ -1,5 +1,5 @@
 from time import sleep
-import serial, random
+import serial, random, transaction
 import requests
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.hazmat.primitives import serialization
@@ -49,11 +49,23 @@ print(resp1.json())
 
 # POST /tx/send/
 ## make payload
+### Payload
+recipientID = "1364d4c4bfa30803a9b6f01939620679ebf8edef35da24b66b038f620d242baf"
+numPERLSSent = 0
+gasLimit = 0.75
+gasDeposit = 0
+functionName = "ic_transaction"
+functionPayload = ""
+### Transaction
+accountID = "3f96ea799b534e8558eddf9443d36a4a2f51e2b24adb33cac175dbec2aaeab0a"
+tag = "1"
 
-post_json = { "sender": "[hex-encoded sender ID, must be 32 bytes long]", "tag": "1",
-              "payload": "[hex-encoded payload, empty for nop]",
-              "signature":signature}
-resp2 = requests.post('https://testnet.perlin.net/tx/send/', json=post_json)
+payload = transaction.Payload(recipientID, numPERLSSent, gasLimit, gasDeposit, functionName, functionPayload)
+transaction = transaction.Transaction(accountID, tag, payload)
+
+print("tranaction : ", transaction)
+
+resp2 = requests.post('https://testnet.perlin.net/tx/send/', transaction.Sign(private_key).Build())
 if resp2.status_code !=201:
     raise ApiError('POST /tx/send/ {}'.format(resp2.status_code))
-print('Send transaction: {}'.format(resp2.json()["tx_id"]))
+print('Send transaction: {}'.format(resp2))
