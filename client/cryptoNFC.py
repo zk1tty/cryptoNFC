@@ -20,9 +20,12 @@ class ApiError(Exception):
 
 class CryptoNFC:
     def __init__(self):
-        pass
+        self.amount = os.argv[1]
 
     def ReadUID(self):
+        print("Sending: {} tokens".format(self.amount))
+        print("to account: {}".format(os.getenv("RECIPIENT_ID")))
+        print("Please tap the NFC card.....")
         ser = serial.Serial(os.getenv("SERIAL_DEVICE"), 9600)
         self.uid = ser.readline()
         return self
@@ -69,12 +72,12 @@ class CryptoNFC:
                     serialization.Encoding.Raw, serialization.PublicFormat.Raw))
             .decode("ascii"),
             3).Sign(self.private_key).Build()
-        print('Req: ', req)
+        print('Performing transaction....')
 
         resp2 = requests.post('https://testnet.perlin.net/tx/send/', req)
-        print('Send transaction: {}'.format(resp2.content))
         if resp2.status_code != 200:
             raise ApiError('POST /tx/send/ {}'.format(resp2.status_code))
+        print('Complete!')
 
 
 if __name__ == "__main__":
