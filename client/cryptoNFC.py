@@ -48,7 +48,7 @@ class CryptoNFC:
 
     def MakePayload(self, accountID, amount):
         numPERLSSent = 0
-        gasLimit = 0.75
+        gasLimit = 75000000
         gasDeposit = 0
         functionName = "ic_transaction"
         functionPayload = transaction.ICTransactionPayload(

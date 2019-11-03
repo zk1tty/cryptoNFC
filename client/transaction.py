@@ -44,9 +44,9 @@ class Payload:
     def Build(self):
         ret = str()
         ret += self.recipientID
-        ret += "%016x" % self.numPERLSSent
-        ret += "%016x" % self.gasLimit
-        ret += "%016x" % self.gasDeposit
+        ret += "%016x" % self.numPERLSSent.newbyteorder()
+        ret += "%016x" % self.gasLimit.newbyteorder()
+        ret += "%016x" % self.gasDeposit.newbyteorder()
 
         # prefix the length
         ret += "%08x" % numpy.int32(len(self.functionName)).newbyteorder()
