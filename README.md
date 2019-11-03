@@ -4,6 +4,14 @@
 decentralized [Wavelet](https://wavelet.perlin.net/) network to send
 [PERL](https://cryptowat.ch/assets/perl) tokens from user to user.
 
+## Dependencies
+
+* Rust set up to build Wavelet smart contracts; follow [the tutorial](https://wavelet.perlin.net/docs/examples/decentralized-chat-app)
+* Python3 with additional libraries:
+  * [`cryptography`](https://pypi.org/project/cryptography/)
+  * [`numpy`](https://pypi.org/project/numpy/)
+  * [`pyserial`](https://pypi.org/project/pyserial/)
+
 ## Usage
 
 *As the owner of the IC card*, run `python3 client/get_key.py`, and use this
