@@ -11,7 +11,7 @@ print("-----------------------")
 print(UID)
 print("-----------------------")
 
-random.seed(UID)
+random.seed(UID.decode("utf-8"))
 ser_byte = random.getrandbits(256)
 private_key = Ed25519PrivateKey.from_private_bytes(
     bytearray.fromhex('{:064x}'.format(ser_byte)))
