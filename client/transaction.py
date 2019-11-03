@@ -14,8 +14,6 @@ class Transaction:
         # tag + payload appended together as bytes
         signstr = bytes.fromhex("0000000000000000") + bytes.fromhex("%02x" %
                                                                     self.tag) + bytes.fromhex(self.payload.Build())
-        print("payload bytes:", bytes.fromhex(self.payload.Build()))
-        print("message bytes:", signstr)
         self.signature = private_key.sign(signstr)
         return self
 
@@ -27,7 +25,6 @@ class Transaction:
         signaturestr = str()
         for ch in self.signature:
             signaturestr += "%02x" % ch
-        print("signaturestr = ", signaturestr)
         txn["signature"] = signaturestr
         return json.dumps(txn)
 

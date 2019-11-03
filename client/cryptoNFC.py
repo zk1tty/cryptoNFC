@@ -76,6 +76,7 @@ class CryptoNFC:
         print('Performing transaction....')
 
         resp2 = requests.post('https://testnet.perlin.net/tx/send/', req)
+        print(resp2.content)
         if resp2.status_code != 200:
             raise ApiError('POST /tx/send/ {}'.format(resp2.status_code))
         print('Complete!')
