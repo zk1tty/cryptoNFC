@@ -11,7 +11,7 @@ ser = serial.Serial(os.getenv("SERIAL_DEVICE"), 9600)
 UID = ser.readline()
 # check
 print("-----------------------")
-print UID
+print(UID)
 print("-----------------------")
 
 # convert ser to 32byte

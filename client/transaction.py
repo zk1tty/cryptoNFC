@@ -11,10 +11,8 @@ class Transaction:
 
     def Sign(self, private_key):
         # the message to be signed is the uint64(0) as little endian bytes + tag + payload appended together as bytes
-        signstr = str()
-        signstr += bytearray.fromhex(self.accountID).decode("ascii")
-        signstr += bytearray.fromhex("%02x" % self.tag).decode("ascii")
-        signstr += bytearray.fromhex(self.payload.Build()).decode("ascii")
+        signstr = bytes.fromhex(self.accountID) + bytes.fromhex("%02x" %
+                                                                self.tag) + bytes.fromhex(self.payload.Build())
         self.signature = private_key.sign(signstr)
         return self
 
