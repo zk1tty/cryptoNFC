@@ -26,6 +26,8 @@ $ export RECIPIENT_ID=[the ID of the recipient of the tokens]
 $ python3 client/cryptoNFC.py [number of microPERLs to send]
 ```
 
+Then, tap the user's IC card to the IC reader.
+
 ## How does it work?
 
 By sending tokens to a smart contract associated with an IC card, a user can
@@ -43,3 +45,7 @@ with the contract ID and UID, the user can authorize that party to deduct some
 tokens using the `ic_transaction` function of the same contract.
 
 ![Flowchart](https://raw.githubusercontent.com/suricata3838/cryptoNFC/master/cryptoNFC.png)
+
+## Authors
+* Eli Wenig `<eli@neukind.jp>`
+* Norika Kizawa `<summer970827@gmail.com>`
