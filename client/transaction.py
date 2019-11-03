@@ -11,8 +11,10 @@ class Transaction:
 
     def Sign(self, private_key):
         # the message to be signed is the uint64(0) as little endian bytes + tag + payload appended together as bytes
-        signstr = bytes.fromhex(self.accountID) + bytes.fromhex("%02x" %
-                                                                self.tag) + bytes.fromhex(self.payload.Build())
+        signstr = bytes.fromhex("0000000000000000") + bytes.fromhex("%02x" %
+                                                                    self.tag) + bytes.fromhex(self.payload.Build())
+        print("payload bytes:", bytes.fromhex(self.payload.Build()))
+        print("message bytes:", signstr)
         self.signature = private_key.sign(signstr)
         return self
 
@@ -41,9 +43,9 @@ class Payload:
     def Build(self):
         ret = str()
         ret += self.recipientID
-        ret += "%016x" % self.numPERLSSent.newbyteorder()
-        ret += "%016x" % self.gasLimit.newbyteorder()
-        ret += "%016x" % self.gasDeposit.newbyteorder()
+        ret += "%016x" % self.numPERLSSent
+        ret += "%016x" % self.gasLimit
+        ret += "%016x" % self.gasDeposit
 
         # prefix the length
         ret += "%08x" % numpy.int32(len(self.functionName)).newbyteorder()
