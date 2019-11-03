@@ -36,13 +36,14 @@ an IC card reader.
 
 ## What's going on under the hood?
 
-We use the UID of a ISO/IEC 14443 A/MIFARE card to generate a unique identity
-for a user in the Wavelet network, which they can use to log in and upload [a
-smart contract](contract/transfer-nfc/src/lib.rs) which can authorize token to
-be sent to a third party. By sending tokens to the smart contract via the
-`charge_ic` function of the smart contract, the user can providing another party
-with the contract ID and UID, the user can authorize that party to deduct some
-tokens using the `ic_transaction` function of the same contract.
+We use the UID of a [ISO/IEC 14443
+A/MIFARE](https://en.wikipedia.org/wiki/ISO/IEC_14443) card to generate a unique
+identity for a user in the Wavelet network, which they can use to log in and
+upload [a smart contract](contract/transfer-nfc/src/lib.rs) which can authorize
+token to be sent to a third party. By sending tokens to the smart contract via
+the `charge_ic` function of the smart contract, the user can providing another
+party with the contract ID and UID, the user can authorize that party to deduct
+some tokens using the `ic_transaction` function of the same contract.
 
 ![Flowchart](https://raw.githubusercontent.com/suricata3838/cryptoNFC/master/cryptoNFC.png)
 
