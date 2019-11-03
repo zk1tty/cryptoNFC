@@ -10,11 +10,11 @@ class Transaction:
         self.payload = payload
 
     def Sign(self, private_key):
+        # the message to be signed is the uint64(0) as little endian bytes + tag + payload appended together as bytes
         signstr = str()
-        for ch in self.accountID:
-            signstr += "%02x" % ord(ch)
-        signstr += "%02x" % self.tag
-        signstr += self.payload.Build()
+        signstr += bytearray.fromhex(self.accountID).decode("ascii")
+        signstr += bytearray.fromhex("%02x" % self.tag).decode("ascii")
+        signstr += bytearray.fromhex(self.payload.Build()).decode("ascii")
         self.signature = private_key.sign(signstr)
         return self
 
@@ -50,7 +50,23 @@ class Payload:
         ret += "%08x" % numpy.int32(len(self.functionName)).newbyteorder()
         for ch in self.functionName:
             ret += "%02x" % ord(ch)
-        ret += "%08x" % numpy.int32(len(self.functionPayload)).newbyteorder()
-        for ch in self.functionPayload:
+        payload = self.functionPayload.Build()
+        ret += "%08x" % numpy.int32(len(payload) / 2).newbyteorder()
+        ret += payload
+        return ret
+
+
+class ICTransactionPayload:
+    def __init__(self, data, signature):
+        self.data = data
+        self.signature = signature
+
+    def Build(self):
+        ret = str()
+        ret += "%08x" % numpy.int32(len(self.data)).newbyteorder()
+        for ch in self.data:
+            ret += "%02x" % ord(ch)
+        ret += "%08x" % numpy.int32(len(self.signature)).newbyteorder()
+        for ch in self.signature:
             ret += "%02x" % ord(ch)
         return ret
