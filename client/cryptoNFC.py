@@ -3,6 +3,7 @@ import serial
 import random
 import os
 import requests
+import sys
 import transaction
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.hazmat.primitives import serialization
@@ -20,7 +21,7 @@ class ApiError(Exception):
 
 class CryptoNFC:
     def __init__(self):
-        self.amount = os.argv[1]
+        self.amount = sys.argv[1]
 
     def ReadUID(self):
         print("Sending: {} tokens".format(self.amount))
@@ -55,7 +56,7 @@ class CryptoNFC:
         gasDeposit = 0
         functionName = "ic_transaction"
         functionPayload = transaction.ICTransactionPayload(
-            os.getenv("RECIPIENT_ID"), 3)
+            os.getenv("RECIPIENT_ID"), self.amount)
 
         # Transaction
         tag = 0x01
