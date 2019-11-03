@@ -66,5 +66,7 @@ class ICTransactionPayload:
     def Build(self):
         ret = str()
         ret += self.recipientID
+        ret += "%02x" % self.amount
         ret += "%016x" % self.amount
+        ret += "00"
         return ret
