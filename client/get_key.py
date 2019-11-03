@@ -11,15 +11,15 @@ print("-----------------------")
 print(UID)
 print("-----------------------")
 
-random.seed(UID.decode("utf-8"))
+random.seed(UID)
 ser_byte = random.getrandbits(256)
 private_key = Ed25519PrivateKey.from_private_bytes(
     bytearray.fromhex('{:064x}'.format(ser_byte)))
-print("export MY_PRIVATE_KEY={}".format(binascii.hexlify(
+print("{}{}".format(binascii.hexlify(
     private_key.private_bytes(
         serialization.Encoding.Raw, serialization.PrivateFormat.Raw,
-        serialization.NoEncryption())).decode("ascii")))
-print("export ACCOUNT_ID={}".format(binascii.hexlify(
+        serialization.NoEncryption())).decode("ascii"),
+    binascii.hexlify(
     private_key.public_key().public_bytes(
         serialization.Encoding.Raw, serialization.PublicFormat.Raw))
     .decode("ascii")))

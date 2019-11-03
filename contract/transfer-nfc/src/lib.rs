@@ -2,11 +2,9 @@ use smart_contract::log;
 use smart_contract::transaction::Transfer;
 use smart_contract::transaction::Transaction;
 use smart_contract::payload::Parameters;
-use smart_contract::crypto::SignatureAlgorithm;
 use smart_contract_macros::smart_contract;
 
 pub struct Contract {
-    pub public_key: [u8; 32],
     pub owner: [u8; 32],
     pub amount: u64,
 }
@@ -15,23 +13,16 @@ pub struct Contract {
 impl Contract {
     fn init(params: &mut Parameters) -> Self {
         Self {
-            public_key: [0; 32],
             owner: params.sender,
             amount: 0,
         }
     }
 
-    fn set_public_key(&mut self, params: &mut Parameters) -> Result<(), String> {
-        let ic: [u8; 32] = params.read();
-        self.public_key = ic;
-
-        Ok({})
-    }
-
     fn charge_ic(&mut self, params: &mut Parameters) -> Result<(), String> {
         let amount: u64 = params.amount;
-        if params.sender != self.owner {
-            return Err("Only the owner of this contract can charge IC".to_string());
+
+        if amount == 0 {
+            return Err("Must send a PERL value along with this request".to_string());
         }
 
         self.amount += amount;
@@ -42,21 +33,13 @@ impl Contract {
     }
 
     fn ic_transaction(&mut self, params: &mut Parameters) -> Result<(), String> {
-        let signed_data: Vec<u8> = params.read();
-        let signature: Vec<u8> = params.read();
+        let recipient: [u8; 32] = params.read();
+        let amount: u64 = params.read();
 
-        if let Err(_err) = smart_contract::crypto::verify(
-            SignatureAlgorithm::Ed25519,
-            &self.public_key, &signed_data, &signature) {
-            return Err("Failed to verify signature".to_string());
+        if params.sender != self.owner {
+            return Err("Only the owner of this contract can transact".to_string());
         }
 
-        let mut be_bytes: [u8; 8] = [0; 8];
-        for x in 0..7 {
-            be_bytes[x] = signed_data[x];
-        }
-
-        let amount = u64::from_be_bytes(be_bytes);
         if self.amount < amount {
             return Err("Not enough funds".to_string());
         }
@@ -64,7 +47,7 @@ impl Contract {
         self.amount -= amount;
 
         Transfer {
-            destination: params.sender,
+            destination: recipient,
             amount: amount,
             invocation: None,
         }
