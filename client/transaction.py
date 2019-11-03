@@ -23,7 +23,8 @@ class Transaction:
         txn["payload"] = self.payload.Build()
         signaturestr = str()
         for ch in self.signature:
-            signaturestr += "%02x" % ord(ch)
+            signaturestr += "%02x" % ch
+        print("signaturestr = ", signaturestr)
         txn["signature"] = signaturestr
         return json.dumps(txn)
 
