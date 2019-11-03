@@ -29,6 +29,7 @@ uploader](https://lens.perlin.net/#/contracts).
 *As the party who wants to receive tokens*, run:
 
 ```
+$ export SERIAL_DEVICE=[path to the serial device of the NFC reader]
 $ export CONTRACT_ID=[the ID of the smart contract]
 $ export RECIPIENT_ID=[the ID of the recipient of the tokens]
 $ python3 client/cryptoNFC.py [number of microPERLs to send]
