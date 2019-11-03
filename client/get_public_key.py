@@ -21,4 +21,5 @@ print("export MY_PRIVATE_KEY={}".format(binascii.hexlify(
         serialization.NoEncryption())).decode("ascii")))
 print("export ACCOUNT_ID={}".format(binascii.hexlify(
     private_key.public_key().public_bytes(
-        serialization.Encoding.Raw, serialization.PublicFormat.Raw)).decode("ascii")))
+        serialization.Encoding.Raw, serialization.PublicFormat.Raw))
+    .decode("ascii")))

@@ -10,7 +10,8 @@ class Transaction:
         self.payload = payload
 
     def Sign(self, private_key):
-        # the message to be signed is the uint64(0) as little endian bytes + tag + payload appended together as bytes
+        # the message to be signed is the uint64(0) as little endian bytes +
+        # tag + payload appended together as bytes
         signstr = bytes.fromhex("0000000000000000") + bytes.fromhex("%02x" %
                                                                     self.tag) + bytes.fromhex(self.payload.Build())
         print("payload bytes:", bytes.fromhex(self.payload.Build()))
@@ -58,16 +59,12 @@ class Payload:
 
 
 class ICTransactionPayload:
-    def __init__(self, data, signature):
-        self.data = data
-        self.signature = signature
+    def __init__(self, recipientID, amount):
+        self.recipientID = recipientID
+        self.amount = numpy.int64(amount)
 
     def Build(self):
         ret = str()
-        ret += "%08x" % numpy.int32(len(self.data)).newbyteorder()
-        for ch in self.data:
-            ret += "%02x" % ch
-        ret += "%08x" % numpy.int32(len(self.signature)).newbyteorder()
-        for ch in self.signature:
-            ret += "%02x" % ch
+        ret += self.recipientID
+        ret += "%016x" % self.amount
         return ret

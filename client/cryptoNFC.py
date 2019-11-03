@@ -1,9 +1,11 @@
+import binascii
 import serial
 import random
 import os
 import requests
 import transaction
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+from cryptography.hazmat.primitives import serialization
 
 
 class ApiError(Exception):
@@ -44,28 +46,29 @@ class CryptoNFC:
         print('-------- GET /Ledger/ --------')
         print(resp1.json())
 
-    def MakePayload(self, accountID, recipientID, amount):
+    def MakePayload(self, accountID, amount):
         numPERLSSent = 0
         gasLimit = 0.75
         gasDeposit = 0
         functionName = "ic_transaction"
         functionPayload = transaction.ICTransactionPayload(
-            amount, self.private_key.sign(amount))  # TODO
+            os.getenv("RECIPIENT_ID"), 3)
 
         # Transaction
         tag = 0x01
         payload = transaction.Payload(
-            recipientID, numPERLSSent, gasLimit, gasDeposit, functionName,
-            functionPayload)
+            os.getenv(
+                "CONTRACT_ID"), numPERLSSent, gasLimit, gasDeposit,
+            functionName, functionPayload)
         return transaction.Transaction(accountID, tag, payload)
 
     def PerformTransaction(self):
-        my_private_key = Ed25519PrivateKey.from_private_bytes(
-            bytearray.fromhex(os.getenv("MY_PRIVATE_KEY")))
         req = self.MakePayload(
-            os.getenv("ACCOUNT_ID"),
-            os.getenv("RECIPIENT_ID"),
-            b"\x03").Sign(my_private_key).Build()
+            binascii.hexlify(
+                self.private_key.public_key().public_bytes(
+                    serialization.Encoding.Raw, serialization.PublicFormat.Raw))
+            .decode("ascii"),
+            3).Sign(self.private_key).Build()
         print('Req: ', req)
 
         resp2 = requests.post('https://testnet.perlin.net/tx/send/', req)
