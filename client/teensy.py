@@ -65,7 +65,8 @@ def MakePayload(accountID, recipientID):
     gasLimit = 0.75
     gasDeposit = 0
     functionName = "ic_transaction"
-    functionPayload = ""  # TODO
+    functionPayload = transaction.ICTransactionPayload(
+        b"\x03", private_key.sign(b"\x03"))  # TODO
 
     # Transaction
     tag = 0x01

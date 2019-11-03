@@ -63,8 +63,8 @@ class ICTransactionPayload:
         ret = str()
         ret += "%08x" % numpy.int32(len(self.data)).newbyteorder()
         for ch in self.data:
-            ret += "%02x" % ord(ch)
+            ret += "%02x" % ch
         ret += "%08x" % numpy.int32(len(self.signature)).newbyteorder()
         for ch in self.signature:
-            ret += "%02x" % ord(ch)
+            ret += "%02x" % ch
         return ret
